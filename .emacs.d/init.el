@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
+ '(create-lockfiles nil)
  '(cursor-type 'box)
  '(inhibit-startup-echo-area-message t)
  '(inhibit-startup-screen t)
@@ -24,4 +25,4 @@
   (invert-face 'mode-line)
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
 (setq backup-directory-alist `((".*" . ,(concat temporary-file-directory "backup"))))
-(setq auto-save-file-name-transforms `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/emacs/auto-save/\\2" t)))
+(setq auto-save-file-name-transforms `((".*" ,(concat temporary-file-directory "auto-save") t)))
