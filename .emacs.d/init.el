@@ -1,3 +1,5 @@
+(require 'package)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -9,6 +11,10 @@
  '(inhibit-startup-echo-area-message t)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(package-archives
+   '(("melpa" . "https://melpa.org/packages/")
+     ("gnu" . "https://elpa.gnu.org/packages/")))
+ '(package-selected-packages '(company magit diminish use-package))
  '(scroll-bar-mode nil)
  '(temporary-file-directory "/tmp/emacs/")
  '(tool-bar-mode nil))
@@ -26,3 +32,24 @@
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
 (setq backup-directory-alist `((".*" . ,(concat temporary-file-directory "backup"))))
 (setq auto-save-file-name-transforms `((".*" ,(concat temporary-file-directory "auto-save") t)))
+
+(package-initialize)
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(eval-when-compile
+  (dolist (package '(use-package diminish bind-key))
+    (unless (package-installed-p package)
+      (package-install package))
+    (require package)))
+
+(use-package magit
+  :ensure t)
+
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :bind ("M-/" . company-complete)
+  :config
+  (global-company-mode))
