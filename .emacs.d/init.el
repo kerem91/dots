@@ -1,15 +1,21 @@
+(setq gc-cons-threshold 134217728)	; Got value from DOOM-Emacs
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
+ '(column-number-mode t)
  '(create-lockfiles nil)
  '(cursor-type 'box)
  '(custom-safe-themes
    '("93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" default))
+ '(display-time-24hr-format t)
+ '(display-time-mode t)
  '(inhibit-startup-echo-area-message t)
  '(inhibit-startup-screen t)
+ '(line-number-mode t)
  '(menu-bar-mode nil)
  '(scroll-bar-mode nil)
  '(temporary-file-directory "/tmp/emacs/")
@@ -20,6 +26,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "red")))))
+
+(global-auto-revert-mode +1)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -46,12 +54,27 @@
 
 (straight-use-package 'diminish)
 
-;; Selectrum
-(straight-use-package 'selectrum)
-(selectrum-mode +1)
-(straight-use-package 'selectrum-prescient)
-(selectrum-prescient-mode +1)
-(prescient-persist-mode +1)
+(use-package selectrum
+  :config
+  (selectrum-mode +1))
+
+(use-package selectrum-prescient
+  :config
+  (selectrum-prescient-mode +1)
+  (prescient-persist-mode +1))
+
+(use-package company
+  :diminish company-mode
+  :bind (("M-/" . company-complete)
+	 :map company-active-map
+	 ("C-n" . company-select-next-or-abort)
+	 ("C-p" . company-select-previous-or-abort))
+  :config
+  (global-company-mode +1))
+
+(use-package company-prescient
+  :config
+  (company-prescient-mode +1))
 
 (use-package which-key
   :config
@@ -73,22 +96,10 @@
 (straight-use-package 'magit)
 
 
-(use-package company
-  :diminish company-mode
-  :bind (("M-/" . company-complete)
-	 :map company-active-map
-	 ("C-n" . company-select-next-or-abort)
-	 ("C-p" . company-select-previous-or-abort))
-  :config
-  (global-company-mode +1))
-
-
-(straight-use-package 'company-prescient)
-(company-prescient-mode +1)
 
 (use-package projectile
   :bind-keymap
-  ("M-p" . projectile-command-map)
+  ("s-p" . projectile-command-map)
   :config
   (projectile-mode +1))
 
@@ -106,3 +117,24 @@
 
 (use-package treemacs-magit
   :after (treemacs magit))
+
+(use-package typescript-mode)
+
+
+(use-package lsp-mode
+  :bind-keymap ("s-l" . lsp-command-map)
+  :hook ((typescript-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+(use-package lsp-ui
+  :commands lsp-ui-mode)
+
+(use-package lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+
+
+
+(use-package which-key
+    :config
+    (which-key-mode))
