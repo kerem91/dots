@@ -17,6 +17,7 @@
  '(inhibit-startup-screen t)
  '(line-number-mode t)
  '(menu-bar-mode nil)
+ '(org-startup-indented t)
  '(scroll-bar-mode nil)
  '(temporary-file-directory "/tmp/emacs/")
  '(tool-bar-mode nil))
@@ -118,7 +119,11 @@
 (use-package treemacs-magit
   :after (treemacs magit))
 
-(use-package typescript-mode)
+(straight-use-package 'yaml-mode)
+(straight-use-package 'web-mode)
+(straight-use-package 'json-mode)
+(straight-use-package 'typescript-mode)
+
 
 
 (use-package lsp-mode
